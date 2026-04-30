@@ -69,6 +69,7 @@
                 nix-cavekit.packages.${system}.default
                 (rtkFor pkgs)
                 pkgs.gh
+                pkgs.git
                 pkgs.nodejs
               ]
               ++ extraDevPackages;
@@ -97,6 +98,7 @@
               nix-cavekit.packages.${system}.default
               (rtkFor pkgs)
               pkgs.gh
+              pkgs.git
               pkgs.nodejs
             ];
           };
