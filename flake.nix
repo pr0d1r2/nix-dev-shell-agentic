@@ -20,6 +20,36 @@
       url = "github:rtk-ai/rtk/v0.38.0";
       flake = false;
     };
+    nix-lefthook-git-conflict-markers = {
+      url = "github:pr0d1r2/nix-lefthook-git-conflict-markers";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-lefthook-git-no-local-paths = {
+      url = "github:pr0d1r2/nix-lefthook-git-no-local-paths";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-lefthook-missing-final-newline = {
+      url = "github:pr0d1r2/nix-lefthook-missing-final-newline";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-lefthook-nix-no-embedded-shell = {
+      url = "github:pr0d1r2/nix-lefthook-nix-no-embedded-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-lefthook-trailing-whitespace = {
+      url = "github:pr0d1r2/nix-lefthook-trailing-whitespace";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-lefthook-statix = {
+      url = "github:pr0d1r2/nix-lefthook-statix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix-lefthook-git-conflict-markers.follows = "nix-lefthook-git-conflict-markers";
+        nix-lefthook-git-no-local-paths.follows = "nix-lefthook-git-no-local-paths";
+        nix-lefthook-missing-final-newline.follows = "nix-lefthook-missing-final-newline";
+        nix-lefthook-trailing-whitespace.follows = "nix-lefthook-trailing-whitespace";
+      };
+    };
   };
 
   outputs =
@@ -29,6 +59,12 @@
       nix-cavemem,
       nix-cavekit,
       rtk-src,
+      nix-lefthook-git-conflict-markers,
+      nix-lefthook-git-no-local-paths,
+      nix-lefthook-missing-final-newline,
+      nix-lefthook-nix-no-embedded-shell,
+      nix-lefthook-trailing-whitespace,
+      nix-lefthook-statix,
     }:
     let
       supportedSystems = [
@@ -92,15 +128,52 @@
           inherit (pkgs.stdenv.hostPlatform) system;
         in
         {
+          ci = pkgs.mkShell {
+            packages = [
+              nix-lefthook-git-conflict-markers.packages.${system}.default
+              nix-lefthook-git-no-local-paths.packages.${system}.default
+              nix-lefthook-missing-final-newline.packages.${system}.default
+              nix-lefthook-nix-no-embedded-shell.packages.${system}.default
+              nix-lefthook-trailing-whitespace.packages.${system}.default
+              nix-lefthook-statix.packages.${system}.default
+              pkgs.deadnix
+              pkgs.editorconfig-checker
+              pkgs.git
+              pkgs.lefthook
+              pkgs.markdownlint-cli
+              pkgs.nix
+              pkgs.nixfmt
+              pkgs.typos
+              pkgs.yamllint
+            ];
+          };
           default = pkgs.mkShell {
             packages = [
+              nix-lefthook-git-conflict-markers.packages.${system}.default
+              nix-lefthook-git-no-local-paths.packages.${system}.default
+              nix-lefthook-missing-final-newline.packages.${system}.default
+              nix-lefthook-nix-no-embedded-shell.packages.${system}.default
+              nix-lefthook-trailing-whitespace.packages.${system}.default
+              nix-lefthook-statix.packages.${system}.default
+              pkgs.deadnix
+              pkgs.editorconfig-checker
+              pkgs.git
+              pkgs.lefthook
+              pkgs.markdownlint-cli
+              pkgs.nix
+              pkgs.nixfmt
+              pkgs.typos
+              pkgs.yamllint
               nix-cavemem.packages.${system}.default
               nix-cavekit.packages.${system}.default
               (rtkFor pkgs)
               pkgs.gh
-              pkgs.git
               pkgs.nodejs
             ];
+            shellHook = ''
+              export NIX_CONFIG="experimental-features = nix-command flakes"
+              [ -f .git/hooks/pre-commit ] || lefthook install
+            '';
           };
         }
       );
