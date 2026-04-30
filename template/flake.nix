@@ -8,7 +8,6 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-dev-shell-agentic = {
       url = "github:pr0d1r2/nix-dev-shell-agentic";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,7 +15,6 @@
     nix-lefthook-vulnix-scan = {
       url = "github:pr0d1r2/nix-lefthook-vulnix-scan";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
     nix-lefthook-git-conflict-markers = {
       url = "github:pr0d1r2/nix-lefthook-git-conflict-markers";
@@ -52,9 +50,7 @@
 
   outputs =
     {
-      self,
       nixpkgs,
-      nixpkgs-unstable,
       nix-dev-shell-agentic,
       nix-lefthook-vulnix-scan,
       nix-lefthook-git-conflict-markers,

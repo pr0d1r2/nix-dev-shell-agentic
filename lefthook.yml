@@ -8,10 +8,6 @@ remotes:
     ref: main
     configs:
       - lefthook-remote.yml
-  - git_url: https://github.com/pr0d1r2/nix-lefthook-deadnix
-    ref: main
-    configs:
-      - lefthook-remote.yml
   - git_url: https://github.com/pr0d1r2/nix-lefthook-nix-no-embedded-shell
     ref: main
     configs:
@@ -53,5 +49,16 @@ remotes:
     configs:
       - lefthook-remote.yml
 
+pre-commit:
+  parallel: true
+  commands:
+    deadnix:
+      glob: "*.nix"
+      run: timeout ${LEFTHOOK_DEADNIX_TIMEOUT:-30} deadnix --fail -L {staged_files}
+
 pre-push:
   parallel: true
+  commands:
+    deadnix:
+      glob: "*.nix"
+      run: timeout ${LEFTHOOK_DEADNIX_TIMEOUT:-30} deadnix --fail -L {push_files}

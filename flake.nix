@@ -40,6 +40,10 @@
       url = "github:pr0d1r2/nix-lefthook-trailing-whitespace";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-lefthook-markdownlint = {
+      url = "github:pr0d1r2/nix-lefthook-markdownlint";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-lefthook-statix = {
       url = "github:pr0d1r2/nix-lefthook-statix";
       inputs = {
@@ -61,6 +65,7 @@
       rtk-src,
       nix-lefthook-git-conflict-markers,
       nix-lefthook-git-no-local-paths,
+      nix-lefthook-markdownlint,
       nix-lefthook-missing-final-newline,
       nix-lefthook-nix-no-embedded-shell,
       nix-lefthook-trailing-whitespace,
@@ -132,6 +137,7 @@
             packages = [
               nix-lefthook-git-conflict-markers.packages.${system}.default
               nix-lefthook-git-no-local-paths.packages.${system}.default
+              nix-lefthook-markdownlint.packages.${system}.default
               nix-lefthook-missing-final-newline.packages.${system}.default
               nix-lefthook-nix-no-embedded-shell.packages.${system}.default
               nix-lefthook-trailing-whitespace.packages.${system}.default
@@ -151,6 +157,7 @@
             packages = [
               nix-lefthook-git-conflict-markers.packages.${system}.default
               nix-lefthook-git-no-local-paths.packages.${system}.default
+              nix-lefthook-markdownlint.packages.${system}.default
               nix-lefthook-missing-final-newline.packages.${system}.default
               nix-lefthook-nix-no-embedded-shell.packages.${system}.default
               nix-lefthook-trailing-whitespace.packages.${system}.default
