@@ -1,0 +1,2 @@
+# System/CI profile whitelist (copy to .vulnix-whitelist-system.toml)
+# Upstream nixpkgs CVEs — false positives or awaiting backport

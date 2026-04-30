@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git rebase *)",
+      "Bash(gh pr *)",
+      "Bash(nix build *)",
+      "Bash(nix flake *)",
+      "WebSearch"
+    ]
+  }
+}
