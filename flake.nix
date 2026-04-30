@@ -54,6 +54,28 @@
         nix-lefthook-trailing-whitespace.follows = "nix-lefthook-trailing-whitespace";
       };
     };
+    nix-lefthook-taplo = {
+      url = "github:pr0d1r2/nix-lefthook-taplo";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix-lefthook-git-conflict-markers.follows = "nix-lefthook-git-conflict-markers";
+        nix-lefthook-git-no-local-paths.follows = "nix-lefthook-git-no-local-paths";
+        nix-lefthook-missing-final-newline.follows = "nix-lefthook-missing-final-newline";
+        nix-lefthook-nix-no-embedded-shell.follows = "nix-lefthook-nix-no-embedded-shell";
+        nix-lefthook-trailing-whitespace.follows = "nix-lefthook-trailing-whitespace";
+      };
+    };
+    nix-lefthook-unicode-lint = {
+      url = "github:pr0d1r2/nix-lefthook-unicode-lint";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nix-lefthook-git-conflict-markers.follows = "nix-lefthook-git-conflict-markers";
+        nix-lefthook-git-no-local-paths.follows = "nix-lefthook-git-no-local-paths";
+        nix-lefthook-missing-final-newline.follows = "nix-lefthook-missing-final-newline";
+        nix-lefthook-nix-no-embedded-shell.follows = "nix-lefthook-nix-no-embedded-shell";
+        nix-lefthook-trailing-whitespace.follows = "nix-lefthook-trailing-whitespace";
+      };
+    };
   };
 
   outputs =
@@ -70,6 +92,8 @@
       nix-lefthook-nix-no-embedded-shell,
       nix-lefthook-trailing-whitespace,
       nix-lefthook-statix,
+      nix-lefthook-taplo,
+      nix-lefthook-unicode-lint,
     }:
     let
       supportedSystems = [
@@ -142,6 +166,8 @@
               nix-lefthook-nix-no-embedded-shell.packages.${system}.default
               nix-lefthook-trailing-whitespace.packages.${system}.default
               nix-lefthook-statix.packages.${system}.default
+              nix-lefthook-taplo.packages.${system}.default
+              nix-lefthook-unicode-lint.packages.${system}.default
               pkgs.deadnix
               pkgs.editorconfig-checker
               pkgs.git
@@ -162,6 +188,8 @@
               nix-lefthook-nix-no-embedded-shell.packages.${system}.default
               nix-lefthook-trailing-whitespace.packages.${system}.default
               nix-lefthook-statix.packages.${system}.default
+              nix-lefthook-taplo.packages.${system}.default
+              nix-lefthook-unicode-lint.packages.${system}.default
               pkgs.deadnix
               pkgs.editorconfig-checker
               pkgs.git
