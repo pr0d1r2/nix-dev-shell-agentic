@@ -65,7 +65,7 @@ This scaffolds a complete project with CI, lefthook hooks, vulnix scanning, and 
 | `lefthook.yml` | Standard remote hooks (nixfmt, shellcheck, shfmt, statix, deadnix, typos, yamllint, etc.) |
 | `.claude/settings.json` | Claude Code permissions |
 | `.gitignore` | result, .direnv, flake.lock |
-| `.vulnix-whitelist-system.toml.example` | System whitelist stub for vulnix scan |
+| `.vulnix-whitelist-system.example.toml` | System whitelist stub for vulnix scan |
 
 ## Binary cache
 
@@ -73,7 +73,7 @@ RTK is built from source but cached via [cachix](https://pr0d1r2.cachix.org). Co
 
 To accept the cache without prompts, add to `~/.config/nix/nix.conf`:
 
-```
+```ini
 trusted-substituters = https://pr0d1r2.cachix.org
 trusted-public-keys = pr0d1r2.cachix.org-1:NfWjbhgAj41byXhCKiaE+av3Vnphm1fTezHXEGsiQIM=
 ```
