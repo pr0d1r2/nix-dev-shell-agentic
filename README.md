@@ -73,7 +73,7 @@ RTK is built from source but cached via [cachix](https://pr0d1r2.cachix.org). Co
 
 To accept the cache without prompts, add to `~/.config/nix/nix.conf`:
 
-```
+```ini
 trusted-substituters = https://pr0d1r2.cachix.org
 trusted-public-keys = pr0d1r2.cachix.org-1:NfWjbhgAj41byXhCKiaE+av3Vnphm1fTezHXEGsiQIM=
 ```
