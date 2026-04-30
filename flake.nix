@@ -7,6 +7,14 @@
       url = "github:pr0d1r2/nix-cavemem";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-cavekit = {
+      url = "github:pr0d1r2/nix-cavekit";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    rtk-src = {
+      url = "github:rtk-ai/rtk/v0.38.0";
+      flake = false;
+    };
   };
 
   outputs =
@@ -14,6 +22,8 @@
       self,
       nixpkgs,
       nix-cavemem,
+      nix-cavekit,
+      rtk-src,
     }:
     let
       supportedSystems = [
@@ -24,6 +34,12 @@
       ];
       forAllSystems =
         f: nixpkgs.lib.genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
+      rtkFor =
+        pkgs:
+        import ./nix/rtk.nix {
+          inherit pkgs;
+          src = rtk-src;
+        };
     in
     {
       lib.mkShells =
@@ -45,6 +61,9 @@
               ciPackages
               ++ [
                 nix-cavemem.packages.${system}.default
+                nix-cavekit.packages.${system}.default
+                (rtkFor pkgs)
+                pkgs.gh
                 pkgs.nodejs
               ]
               ++ extraDevPackages;
@@ -52,18 +71,31 @@
           };
         };
 
+      packages = forAllSystems (pkgs: {
+        rtk = rtkFor pkgs;
+      });
+
       templates.default = {
         path = ./template;
         description = "Nix project with agentic dev shell, CI split, lefthook, and vulnix scan";
       };
 
-      devShells = forAllSystems (pkgs: {
-        default = pkgs.mkShell {
-          packages = [
-            nix-cavemem.packages.${pkgs.stdenv.hostPlatform.system}.default
-            pkgs.nodejs
-          ];
-        };
-      });
+      devShells = forAllSystems (
+        pkgs:
+        let
+          inherit (pkgs.stdenv.hostPlatform) system;
+        in
+        {
+          default = pkgs.mkShell {
+            packages = [
+              nix-cavemem.packages.${system}.default
+              nix-cavekit.packages.${system}.default
+              (rtkFor pkgs)
+              pkgs.gh
+              pkgs.nodejs
+            ];
+          };
+        }
+      );
     };
 }

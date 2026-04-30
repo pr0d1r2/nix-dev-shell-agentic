@@ -2,7 +2,17 @@
 
 Nix flake library and template for agentic dev shells with CI/dev split.
 
-Bundles [cavemem](https://github.com/pr0d1r2/nix-cavemem), Node.js, and provides `mkShells` to create paired CI and dev shells from a single package list.
+Bundles agentic tools in one input — no more duplicating `nix/rtk.nix` and cave* inputs across repos.
+
+## Bundled tools
+
+| Tool | Source | Purpose |
+|------|--------|---------|
+| [cavemem](https://github.com/pr0d1r2/nix-cavemem) | flake input | Cross-agent persistent memory |
+| [cavekit](https://github.com/pr0d1r2/nix-cavekit) | flake input | Spec-driven development toolkit |
+| [rtk](https://github.com/rtk-ai/rtk) | built from source | Token-optimized CLI proxy (60-90% savings) |
+| gh | nixpkgs | GitHub CLI |
+| nodejs | nixpkgs | Node.js runtime |
 
 ## Quick start
 
@@ -36,7 +46,7 @@ direnv allow
 
 This creates:
 - `.#ci` — CI shell with `ciPackages` only
-- `.#default` — dev shell with `ciPackages` + cavemem + Node.js
+- `.#default` — dev shell with `ciPackages` + all agentic tools
 
 ## Template contents
 
