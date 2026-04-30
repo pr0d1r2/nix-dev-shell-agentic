@@ -52,3 +52,6 @@ remotes:
     ref: main
     configs:
       - lefthook-remote.yml
+
+pre-push:
+  parallel: true

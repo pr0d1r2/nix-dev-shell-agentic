@@ -22,6 +22,8 @@ jobs:
             experimental-features = nix-command flakes
       - name: Pre-commit checks
         run: TERM=dumb nix develop .#ci --ignore-environment --keep TERM --command bash -c 'LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT=300 lefthook run pre-commit --all-files'
+      - name: Pre-push checks
+        run: TERM=dumb nix develop .#ci --ignore-environment --keep TERM --command bash -c 'lefthook run pre-push --all-files'
 
   build:
     needs: lint
