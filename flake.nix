@@ -110,6 +110,41 @@
           inherit pkgs;
           src = rtk-src;
         };
+      baseCiPackagesFor =
+        pkgs:
+        let
+          inherit (pkgs.stdenv.hostPlatform) system;
+          batsWithLibs = pkgs.bats.withLibraries (p: [
+            p.bats-support
+            p.bats-assert
+            p.bats-file
+          ]);
+        in
+        [
+          nix-lefthook-git-conflict-markers.packages.${system}.default
+          nix-lefthook-git-no-local-paths.packages.${system}.default
+          nix-lefthook-markdownlint.packages.${system}.default
+          nix-lefthook-missing-final-newline.packages.${system}.default
+          nix-lefthook-nix-no-embedded-shell.packages.${system}.default
+          nix-lefthook-trailing-whitespace.packages.${system}.default
+          nix-lefthook-statix.packages.${system}.default
+          nix-lefthook-taplo.packages.${system}.default
+          nix-lefthook-unicode-lint.packages.${system}.default
+          batsWithLibs
+          pkgs.coreutils
+          pkgs.deadnix
+          pkgs.editorconfig-checker
+          pkgs.git
+          pkgs.lefthook
+          pkgs.markdownlint-cli
+          pkgs.nix
+          pkgs.nixfmt
+          pkgs.parallel
+          pkgs.shellcheck
+          pkgs.shfmt
+          pkgs.typos
+          pkgs.yamllint
+        ];
     in
     {
       lib.mkShells =
@@ -121,20 +156,20 @@
         }:
         let
           inherit (pkgs.stdenv.hostPlatform) system;
+          allCiPackages = (baseCiPackagesFor pkgs) ++ ciPackages;
         in
         {
           ci = pkgs.mkShell {
-            packages = ciPackages;
+            packages = allCiPackages;
           };
           default = pkgs.mkShell {
             packages =
-              ciPackages
+              allCiPackages
               ++ [
                 nix-cavemem.packages.${system}.default
                 nix-cavekit.packages.${system}.default
                 (rtkFor pkgs)
                 pkgs.gh
-                pkgs.git
                 pkgs.nodejs
               ]
               ++ extraDevPackages;
@@ -155,50 +190,14 @@
         pkgs:
         let
           inherit (pkgs.stdenv.hostPlatform) system;
+          ciPackages = baseCiPackagesFor pkgs;
         in
         {
           ci = pkgs.mkShell {
-            packages = [
-              nix-lefthook-git-conflict-markers.packages.${system}.default
-              nix-lefthook-git-no-local-paths.packages.${system}.default
-              nix-lefthook-markdownlint.packages.${system}.default
-              nix-lefthook-missing-final-newline.packages.${system}.default
-              nix-lefthook-nix-no-embedded-shell.packages.${system}.default
-              nix-lefthook-trailing-whitespace.packages.${system}.default
-              nix-lefthook-statix.packages.${system}.default
-              nix-lefthook-taplo.packages.${system}.default
-              nix-lefthook-unicode-lint.packages.${system}.default
-              pkgs.deadnix
-              pkgs.editorconfig-checker
-              pkgs.git
-              pkgs.lefthook
-              pkgs.markdownlint-cli
-              pkgs.nix
-              pkgs.nixfmt
-              pkgs.typos
-              pkgs.yamllint
-            ];
+            packages = ciPackages;
           };
           default = pkgs.mkShell {
-            packages = [
-              nix-lefthook-git-conflict-markers.packages.${system}.default
-              nix-lefthook-git-no-local-paths.packages.${system}.default
-              nix-lefthook-markdownlint.packages.${system}.default
-              nix-lefthook-missing-final-newline.packages.${system}.default
-              nix-lefthook-nix-no-embedded-shell.packages.${system}.default
-              nix-lefthook-trailing-whitespace.packages.${system}.default
-              nix-lefthook-statix.packages.${system}.default
-              nix-lefthook-taplo.packages.${system}.default
-              nix-lefthook-unicode-lint.packages.${system}.default
-              pkgs.deadnix
-              pkgs.editorconfig-checker
-              pkgs.git
-              pkgs.lefthook
-              pkgs.markdownlint-cli
-              pkgs.nix
-              pkgs.nixfmt
-              pkgs.typos
-              pkgs.yamllint
+            packages = ciPackages ++ [
               nix-cavemem.packages.${system}.default
               nix-cavekit.packages.${system}.default
               (rtkFor pkgs)
