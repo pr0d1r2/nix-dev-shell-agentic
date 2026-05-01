@@ -61,6 +61,7 @@
         pkgs.parallel
         pkgs.shellcheck
         pkgs.shfmt
+        pkgs.statix
         pkgs.typos
         pkgs.yamllint
       ];
