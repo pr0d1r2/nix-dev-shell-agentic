@@ -1,43 +1,64 @@
 ---
+remotes:
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-nixfmt
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-statix
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-nix-no-embedded-shell
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-nix-flake-check
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-yamllint
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-typos
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-editorconfig-checker
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-trailing-whitespace
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-missing-final-newline
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-git-conflict-markers
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-git-no-local-paths
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-markdownlint
+    ref: main
+    configs:
+      - lefthook-remote.yml
+
 pre-commit:
   parallel: true
   commands:
     deadnix:
       glob: "*.nix"
-      run: timeout 30 deadnix --fail -L {staged_files}
-    nixfmt:
-      glob: "*.nix"
-      run: timeout 30 nixfmt --check {staged_files}
-    statix:
-      glob: "*.nix"
-      run: |
-        for f in {staged_files}; do
-          timeout 30 statix check "$f" || exit 1
-        done
-    nix-flake-check:
-      glob: "*.nix"
-      run: timeout 300 nix flake check
-    yamllint:
-      glob: "*.{yml,yaml}"
-      run: timeout 30 yamllint {staged_files}
-    typos:
-      run: timeout 30 typos {staged_files}
-    editorconfig-checker:
-      run: timeout 30 editorconfig-checker {staged_files}
-    trailing-whitespace:
-      run: timeout 30 grep -rlP '\s+$' {staged_files} && exit 1 || true
-    missing-final-newline:
-      run: |
-        for f in {staged_files}; do
-          [ -s "$f" ] && [ -n "$(tail -c 1 "$f")" ] && echo "missing newline: $f" && exit 1
-        done
-        true
-    git-conflict-markers:
-      run: timeout 30 grep -rlP '<{6}|>{6}|={7}' {staged_files} && exit 1 || true
+      run: timeout ${LEFTHOOK_DEADNIX_TIMEOUT:-30} deadnix --fail -L {staged_files}
 
 pre-push:
   parallel: true
   commands:
     deadnix:
       glob: "*.nix"
-      run: timeout 30 deadnix --fail -L {push_files}
+      run: timeout ${LEFTHOOK_DEADNIX_TIMEOUT:-30} deadnix --fail -L {push_files}
