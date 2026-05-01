@@ -27,18 +27,12 @@ jobs:
           --command bash -c
           'export NIX_CONFIG="experimental-features = nix-command flakes";
           lefthook install'
-      - name: Pre-commit checks
+      - name: Lefthook checks
         run: >-
           TERM=dumb nix develop .#ci --ignore-environment --keep TERM
           --command bash -c
           'export NIX_CONFIG="experimental-features = nix-command flakes";
           LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT=300
-          lefthook run pre-commit --all-files'
-      - name: Pre-push checks
-        run: >-
-          TERM=dumb nix develop .#ci --ignore-environment --keep TERM
-          --command bash -c
-          'export NIX_CONFIG="experimental-features = nix-command flakes";
           lefthook run pre-push --all-files'
 
   build:
