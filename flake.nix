@@ -48,6 +48,34 @@
       url = "github:pr0d1r2/nix-lefthook-trailing-whitespace";
       flake = false;
     };
+    nix-lefthook-deadnix-src = {
+      url = "github:pr0d1r2/nix-lefthook-deadnix";
+      flake = false;
+    };
+    nix-lefthook-editorconfig-checker-src = {
+      url = "github:pr0d1r2/nix-lefthook-editorconfig-checker";
+      flake = false;
+    };
+    nix-lefthook-nixfmt-src = {
+      url = "github:pr0d1r2/nix-lefthook-nixfmt";
+      flake = false;
+    };
+    nix-lefthook-shellcheck-src = {
+      url = "github:pr0d1r2/nix-lefthook-shellcheck";
+      flake = false;
+    };
+    nix-lefthook-shfmt-src = {
+      url = "github:pr0d1r2/nix-lefthook-shfmt";
+      flake = false;
+    };
+    nix-lefthook-typos-src = {
+      url = "github:pr0d1r2/nix-lefthook-typos";
+      flake = false;
+    };
+    nix-lefthook-yamllint-src = {
+      url = "github:pr0d1r2/nix-lefthook-yamllint";
+      flake = false;
+    };
   };
 
   outputs =
@@ -63,6 +91,13 @@
       nix-lefthook-nix-no-embedded-shell-src,
       nix-lefthook-statix-src,
       nix-lefthook-trailing-whitespace-src,
+      nix-lefthook-deadnix-src,
+      nix-lefthook-editorconfig-checker-src,
+      nix-lefthook-nixfmt-src,
+      nix-lefthook-shellcheck-src,
+      nix-lefthook-shfmt-src,
+      nix-lefthook-typos-src,
+      nix-lefthook-yamllint-src,
       ...
     }:
     let
@@ -123,6 +158,27 @@
           })
           (wrap "lefthook-trailing-whitespace" nix-lefthook-trailing-whitespace-src {
             runtimeInputs = [ pkgs.gnugrep ];
+          })
+          (wrap "lefthook-deadnix" nix-lefthook-deadnix-src {
+            runtimeInputs = [ pkgs.deadnix ];
+          })
+          (wrap "lefthook-editorconfig-checker" nix-lefthook-editorconfig-checker-src {
+            runtimeInputs = [ pkgs.editorconfig-checker ];
+          })
+          (wrap "lefthook-nixfmt" nix-lefthook-nixfmt-src {
+            runtimeInputs = [ pkgs.nixfmt ];
+          })
+          (wrap "lefthook-shellcheck" nix-lefthook-shellcheck-src {
+            runtimeInputs = [ pkgs.shellcheck ];
+          })
+          (wrap "lefthook-shfmt" nix-lefthook-shfmt-src {
+            runtimeInputs = [ pkgs.shfmt ];
+          })
+          (wrap "lefthook-typos" nix-lefthook-typos-src {
+            runtimeInputs = [ pkgs.typos ];
+          })
+          (wrap "lefthook-yamllint" nix-lefthook-yamllint-src {
+            runtimeInputs = [ pkgs.yamllint ];
           })
         ];
       baseCiPackagesFor = pkgs: [
