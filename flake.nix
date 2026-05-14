@@ -76,6 +76,26 @@
       url = "github:pr0d1r2/nix-lefthook-yamllint";
       flake = false;
     };
+    nix-lefthook-ascii-only-src = {
+      url = "github:pr0d1r2/nix-lefthook-ascii-only";
+      flake = false;
+    };
+    nix-lefthook-file-size-check-src = {
+      url = "github:pr0d1r2/nix-lefthook-file-size-check";
+      flake = false;
+    };
+    nix-lefthook-gitleaks-src = {
+      url = "github:pr0d1r2/nix-lefthook-gitleaks";
+      flake = false;
+    };
+    nix-lefthook-unicode-lint-src = {
+      url = "github:pr0d1r2/nix-lefthook-unicode-lint";
+      flake = false;
+    };
+    nix-lefthook-execute-permissions-src = {
+      url = "github:pr0d1r2/nix-lefthook-execute-permissions";
+      flake = false;
+    };
   };
 
   outputs =
@@ -98,6 +118,11 @@
       nix-lefthook-shfmt-src,
       nix-lefthook-typos-src,
       nix-lefthook-yamllint-src,
+      nix-lefthook-ascii-only-src,
+      nix-lefthook-file-size-check-src,
+      nix-lefthook-gitleaks-src,
+      nix-lefthook-unicode-lint-src,
+      nix-lefthook-execute-permissions-src,
       ...
     }:
     let
@@ -180,12 +205,40 @@
           (wrap "lefthook-yamllint" nix-lefthook-yamllint-src {
             runtimeInputs = [ pkgs.yamllint ];
           })
+          (wrap "lefthook-ascii-only" nix-lefthook-ascii-only-src {
+            runtimeInputs = [ pkgs.gnugrep ];
+          })
+          (wrap "lefthook-file-size-check" nix-lefthook-file-size-check-src {
+            runtimeInputs = [
+              pkgs.gawk
+              pkgs.gnugrep
+              pkgs.coreutils
+            ];
+          })
+          (wrap "lefthook-gitleaks" nix-lefthook-gitleaks-src {
+            runtimeInputs = [
+              pkgs.gitleaks
+              pkgs.coreutils
+            ];
+          })
+          (wrap "lefthook-unicode-lint" nix-lefthook-unicode-lint-src {
+            runtimeInputs = [
+              pkgs.gnugrep
+              pkgs.libiconv
+              pkgs.python3
+              pkgs.perl
+            ];
+          })
+          (wrap "lefthook-execute-permissions" nix-lefthook-execute-permissions-src {
+            runtimeInputs = [ pkgs.gnugrep ];
+          })
         ];
       baseCiPackagesFor = pkgs: [
         pkgs.coreutils
         pkgs.deadnix
         pkgs.editorconfig-checker
         pkgs.git
+        pkgs.gitleaks
         pkgs.lefthook
         pkgs.nix
         pkgs.nixfmt
