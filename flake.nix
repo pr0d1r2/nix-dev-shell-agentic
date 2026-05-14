@@ -96,6 +96,10 @@
       url = "github:pr0d1r2/nix-lefthook-execute-permissions";
       flake = false;
     };
+    nix-lefthook-tdd-order-bats-src = {
+      url = "github:pr0d1r2/nix-lefthook-tdd-order-bats";
+      flake = false;
+    };
   };
 
   outputs =
@@ -123,6 +127,7 @@
       nix-lefthook-gitleaks-src,
       nix-lefthook-unicode-lint-src,
       nix-lefthook-execute-permissions-src,
+      nix-lefthook-tdd-order-bats-src,
       ...
     }:
     let
@@ -232,6 +237,7 @@
           (wrap "lefthook-execute-permissions" nix-lefthook-execute-permissions-src {
             runtimeInputs = [ pkgs.gnugrep ];
           })
+          (wrap "lefthook-tdd-order-bats" nix-lefthook-tdd-order-bats-src { })
         ];
       baseCiPackagesFor = pkgs: [
         pkgs.coreutils
@@ -279,6 +285,7 @@
         {
           ci = pkgs.mkShell {
             packages = allCiPackages;
+            BATS_LIB_PATH = "${batsWithLibs}/share/bats";
           };
           default = pkgs.mkShell {
             packages =
