@@ -8,6 +8,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nix-lefthook = {
+      url = "github:pr0d1r2/nix-lefthook";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-cavemem = {
       url = "github:pr0d1r2/nix-cavemem";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -105,6 +109,7 @@
   outputs =
     {
       nixpkgs,
+      nix-lefthook,
       nix-cavemem,
       nix-cavekit,
       rtk-src,
@@ -245,7 +250,7 @@
         pkgs.editorconfig-checker
         pkgs.git
         pkgs.gitleaks
-        pkgs.lefthook
+        nix-lefthook.packages.${pkgs.stdenv.hostPlatform.system}.default
         pkgs.nix
         pkgs.nixfmt
         pkgs.parallel
@@ -310,6 +315,8 @@
       packages = forAllSystems (pkgs: {
         rtk = rtkFor pkgs;
       });
+
+      overlays.lefthook = nix-lefthook.overlays.default;
 
       templates.default = {
         path = ./template;
