@@ -281,11 +281,11 @@
           inherit (pkgs.stdenv.hostPlatform) system;
           batsWithLibs = batsWithLibsFor pkgs;
           allCiPackages =
-            (lefthookWrappersFor pkgs)
+            ciPackages
+            ++ (lefthookWrappersFor pkgs)
             ++ (lefthookPackagesFrom inputs system)
             ++ (baseCiPackagesFor pkgs)
-            ++ [ batsWithLibs ]
-            ++ ciPackages;
+            ++ [ batsWithLibs ];
         in
         {
           ci = pkgs.mkShell {
