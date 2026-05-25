@@ -9,34 +9,33 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+  lint-linux:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: cachix/install-nix-action@v31
+      - uses: pr0d1r2/nix-lefthook-ci-action@e5076886865ac3aed148127ea3aa7269ffcf6989
         with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            accept-flake-config = true
-      - name: Install lefthook and sync remotes
-        run: >-
-          TERM=dumb nix develop .#ci --ignore-environment --keep TERM
-          --command bash -c
-          'export NIX_CONFIG="experimental-features = nix-command flakes";
-          lefthook install'
-      - name: Lefthook checks
-        run: >-
-          TERM=dumb nix develop .#ci --ignore-environment --keep TERM
-          --command bash -c
-          'export NIX_CONFIG="experimental-features = nix-command flakes";
-          LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT=300
-          lefthook run pre-push --all-files'
+          extra-env: >-
+            export NIX_CONFIG="experimental-features = nix-command flakes";
+          flake-check-timeout: '300'
+          skip-build: 'true'
+          skip-pre-commit: 'true'
+
+  lint-macos:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pr0d1r2/nix-lefthook-ci-action@e5076886865ac3aed148127ea3aa7269ffcf6989
+        with:
+          extra-env: >-
+            export NIX_CONFIG="experimental-features = nix-command flakes";
+          flake-check-timeout: '300'
+          skip-build: 'true'
+          skip-pre-commit: 'true'
 
   build:
-    needs: lint
+    needs: lint-linux
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -58,7 +57,7 @@ jobs:
         run: nix flake check
 
   build-linux-arm:
-    needs: lint
+    needs: lint-linux
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v6
