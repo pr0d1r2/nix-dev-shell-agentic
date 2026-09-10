@@ -105,6 +105,20 @@
       url = "github:pr0d1r2/nix-lefthook-tdd-order-bats";
       flake = false;
     };
+    # These two remote configs name a WRAPPER binary rather than a bare tool,
+    # so a consumer that pulls the config without the wrapper gets
+    # `failed to run command` -- which lefthook reports as a failed CHECK,
+    # indistinguishable from the check actually finding something.
+    # MEASURED across the fleet: 47 repositories pull the bats-unit config
+    # without supplying its binary, and 14 do the same with commit-msg-lint.
+    nix-lefthook-bats-unit-src = {
+      url = "github:pr0d1r2/nix-lefthook-bats-unit";
+      flake = false;
+    };
+    nix-lefthook-commit-msg-lint-src = {
+      url = "github:pr0d1r2/nix-lefthook-commit-msg-lint";
+      flake = false;
+    };
   };
 
   outputs =
@@ -134,6 +148,8 @@
       nix-lefthook-unicode-lint-src,
       nix-lefthook-execute-permissions-src,
       nix-lefthook-tdd-order-bats-src,
+      nix-lefthook-bats-unit-src,
+      nix-lefthook-commit-msg-lint-src,
       ...
     }:
     let
@@ -244,6 +260,19 @@
             runtimeInputs = [ pkgs.gnugrep ];
           })
           (wrap "lefthook-tdd-order-bats" nix-lefthook-tdd-order-bats-src { })
+          (wrap "lefthook-bats-unit" nix-lefthook-bats-unit-src {
+            runtimeInputs = [
+              pkgs.bats
+              pkgs.coreutils
+              pkgs.parallel
+            ];
+          })
+          (wrap "lefthook-commit-msg-lint" nix-lefthook-commit-msg-lint-src {
+            runtimeInputs = [
+              pkgs.coreutils
+              pkgs.gnugrep
+            ];
+          })
         ];
       baseCiPackagesFor = pkgs: [
         pkgs.coreutils
