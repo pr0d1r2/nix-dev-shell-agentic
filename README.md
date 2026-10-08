@@ -12,7 +12,7 @@ Bundles agentic tools in one input — no more duplicating `nix/rtk.nix` and cav
 |------|--------|---------|
 | [cavemem](https://github.com/pr0d1r2/nix-cavemem) | flake input | Cross-agent persistent memory |
 | [cavekit](https://github.com/pr0d1r2/nix-cavekit) | flake input | Spec-driven development toolkit |
-| [rtk](https://github.com/rtk-ai/rtk) | built from source, cached via cachix | Token-optimized CLI proxy (60-90% savings) |
+| [rtk](https://github.com/rtk-ai/rtk) | prebuilt from [nix-rtk](https://github.com/pr0d1r2/nix-rtk) `cached` branch | Token-optimized CLI proxy (60-90% savings) |
 | git | nixpkgs | Version control |
 | gh | nixpkgs | GitHub CLI |
 | nodejs | nixpkgs | Node.js runtime |
@@ -69,7 +69,7 @@ This scaffolds a complete project with CI, lefthook hooks, vulnix scanning, and 
 
 ## Binary cache
 
-RTK is built from source but cached via [cachix](https://pr0d1r2.cachix.org). Consumer flakes include `nixConfig` with the substituter, so `nix develop` pulls pre-built binaries instead of compiling.
+RTK comes from [nix-rtk](https://github.com/pr0d1r2/nix-rtk)'s `cached` branch, which only advances after CI confirms every tier-1 binary is in [cachix](https://pr0d1r2.cachix.org). Consumer flakes include `nixConfig` with the substituter, so `nix develop` pulls pre-built binaries instead of compiling.
 
 To accept the cache without prompts, add to `~/.config/nix/nix.conf`:
 
