@@ -21,10 +21,11 @@
       url = "github:pr0d1r2/nix-cavekit";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    rtk-src = {
-      url = "github:rtk-ai/rtk/v0.38.0";
-      flake = false;
-    };
+    # Prebuilt rtk: the `cached` branch only points at commits whose binaries
+    # are already in pr0d1r2.cachix.org. No nixpkgs follows on purpose -- rtk
+    # rebuilt against our nixpkgs is a different store path and misses the
+    # cache.
+    nix-rtk.url = "github:pr0d1r2/nix-rtk/cached";
     nix-lefthook-git-conflict-markers-src = {
       url = "github:pr0d1r2/nix-lefthook-git-conflict-markers";
       flake = false;
@@ -127,7 +128,7 @@
       nix-lefthook,
       nix-cavemem,
       nix-cavekit,
-      rtk-src,
+      nix-rtk,
       nix-lefthook-git-conflict-markers-src,
       nix-lefthook-git-no-local-paths-src,
       nix-lefthook-markdownlint-src,
@@ -161,12 +162,7 @@
       ];
       forAllSystems =
         f: nixpkgs.lib.genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
-      rtkFor =
-        pkgs:
-        import ./nix/rtk.nix {
-          inherit pkgs;
-          src = rtk-src;
-        };
+      rtkFor = pkgs: nix-rtk.packages.${pkgs.stdenv.hostPlatform.system}.default;
       lefthookPackagesFrom =
         inputs: system:
         nixpkgs.lib.mapAttrsToList (_: input: input.packages.${system}.default) (
